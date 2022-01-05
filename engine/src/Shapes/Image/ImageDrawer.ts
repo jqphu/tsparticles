@@ -111,9 +111,11 @@ export class ImageDrawer implements IShapeDrawer {
         const imageOptions = shapeOptions.options[ShapeType.images] ?? shapeOptions.options[ShapeType.image];
 
         if (imageOptions instanceof Array) {
+            let promiseArray: Promise<void>[] = [];
             for (const optionsImage of imageOptions) {
-                await this.loadImageShape(container, optionsImage as IImageShape);
+                promiseArray.push(this.loadImageShape(container, optionsImage as IImageShape));
             }
+            await Promise.all(promiseArray);
         } else {
             await this.loadImageShape(container, imageOptions as IImageShape);
         }
